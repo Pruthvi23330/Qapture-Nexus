@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Udyog Saarthi Connect | Admin Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #00A9E0; 
+            --bg: #F3F4F6;
+            --card-bg: #FFFFFF;
+            --text-main: #1F2937;
+            --text-muted: #6B7280;
+            --border: #E5E7EB;
+            --danger: #EF4444;
+            --success: #10B981;
+            --warning: #F59E0B;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+
+        body { background-color: var(--bg); color: var(--text-main); min-height: 100vh; }
+
+        /* Login Page Styles */
+        #login-section {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--bg);
+        }
+
+        .login-card {
+            background: white;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .login-card .logo-section {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 30px;
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+
+        .login-group {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+
+        .login-group label {
+            display: block;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .login-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: #F9FAFB;
+            outline: none;
+        }
+
+        .btn-login {
+            width: 100%;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .hint-box {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 20px;
+            background: #f0f9ff;
+            padding: 10px;
+            border-radius: 6px;
+            line-height: 1.5;
+        }
+
+        /* Sidebar Navigation */
+        #main-dashboard { display: none; } /* Hidden by default */
+        
+        .sidebar { width: 260px; background: white; border-right: 1px solid var(--border); padding: 20px; position: fixed; height: 100%; }
+        .logo-section { display: flex; align-items: center; gap: 10px; margin-bottom: 40px; color: var(--primary); font-weight: 700; font-size: 1.2rem; }
+        .nav-item { display: flex; align-items: center; gap: 12px; padding: 12px; text-decoration: none; color: var(--text-muted); border-radius: 8px; margin-bottom: 5px; transition: 0.3s; }
+        .nav-item:hover, .nav-item.active { background: #F0F9FF; color: var(--primary); }
+
+        /* Main Content Area */
+        .main-container { margin-left: 260px; width: calc(100% - 260px); padding: 30px; }
+
+        header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        .logout-link { color: var(--danger); text-decoration: none; display: flex; align-items: center; gap: 5px; font-weight: 500; cursor: pointer; }
+
+        /* Stats Cards Section */
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 30px; }
+        .stat-card { background: white; padding: 25px; border-radius: 16px; display: flex; align-items: center; gap: 20px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+        .stat-icon { width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; }
+        .icon-blue { background: #E0F2FE; color: #0EA5E9; }
+        .icon-cyan { background: #E0FCFF; color: #0891B2; }
+        .icon-green { background: #DCFCE7; color: #16A34A; }
+        .stat-info h3 { font-size: 0.9rem; color: var(--text-muted); }
+        .stat-info p { font-size: 1.8rem; font-weight: 700; }
+
+        /* Form Section */
+        .dashboard-section { background: white; padding: 30px; border-radius: 16px; margin-bottom: 30px; border: 1px solid var(--border); }
+        .section-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 25px; display: flex; align-items: center; gap: 10px; }
+        
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .form-group { display: flex; flex-direction: column; gap: 8px; }
+        .full-width { grid-column: span 2; }
+        
+        input, textarea, select { padding: 12px; border: 1px solid var(--border); border-radius: 8px; background: #F9FAFB; outline: none; transition: 0.2s; }
+        input:focus, textarea:focus { border-color: var(--primary); background: white; }
+
+        /* File Upload Styling */
+        .file-upload-container { margin-top: 15px; padding: 15px; border: 1px dashed var(--border); border-radius: 8px; background: #F9FAFB; }
+        .upload-btn { display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; background: white; border: 1px solid var(--primary); color: var(--primary); border-radius: 6px; cursor: pointer; font-size: 0.85rem; font-weight: 600; transition: 0.3s; }
+        .upload-btn:hover { background: var(--primary); color: white; }
+
+        /* Disability Type Tags */
+        .tags-container { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
+        .tag { padding: 6px 16px; border: 1px solid var(--border); border-radius: 20px; font-size: 13px; color: var(--text-muted); cursor: pointer; transition: 0.3s; }
+        .tag:hover, .tag.selected { background: var(--primary); color: white; border-color: var(--primary); }
+
+        .btn-post { background: var(--primary); color: white; border: none; padding: 12px 30px; border-radius: 8px; font-weight: 600; margin-top: 20px; cursor: pointer; transition: 0.3s; }
+        .btn-post:hover { opacity: 0.9; transform: translateY(-1px); }
+
+        /* Tables & Lists */
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th { text-align: left; padding: 15px; background: #F9FAFB; color: var(--text-muted); font-size: 0.85rem; text-transform: uppercase; border-bottom: 1px solid var(--border); }
+        td { padding: 15px; border-bottom: 1px solid var(--border); font-size: 0.95rem; }
+        
+        .badge { padding: 4px 10px; border-radius: 6px; font-size: 0.8rem; font-weight: 500; }
+        .badge-info { background: #E0F2FE; color: #0369A1; }
+        .badge-danger { background: #FEE2E2; color: #DC2626; }
+        .badge-success { background: #DCFCE7; color: #16A34A; }
+
+        .job-item { display: flex; justify-content: space-between; align-items: center; padding: 20px; border: 1px solid var(--border); border-radius: 12px; margin-bottom: 15px; position: relative; }
+        .job-content { flex: 1; }
+        .job-meta { display: flex; gap: 20px; color: var(--text-muted); font-size: 0.85rem; margin-top: 5px; }
+        .actions { display: flex; gap: 15px; color: var(--text-muted); }
+        .actions i { font-size: 1.2rem; transition: 0.2s; }
+        .actions i:hover { color: var(--primary); cursor: pointer; }
+        .actions .ri-delete-bin-line:hover { color: var(--danger); }
+
+        /* Feedback Styles */
+        .reply-box { margin-top: 10px; display: flex; gap: 8px; }
+        .reply-input { flex: 1; padding: 8px; border: 1px solid var(--border); border-radius: 6px; font-size: 0.85rem; }
+        .btn-reply { background: var(--primary); color: white; border: none; padding: 5px 15px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; }
+    </style>
+</head>
+<body>
+
+    <div id="login-section">
+        <div class="login-card">
+            <div class="logo-section">
+                <i class="ri-briefcase-fill"></i>
+                <span>Udyog Saarthi</span>
+            </div>
+            <h2 style="margin-bottom: 25px;">Admin Portal</h2>
+            <div class="login-group">
+                <label>Email ID</label>
+                <input type="email" id="adminEmail" placeholder="Enter admin email">
+            </div>
+            <div class="login-group">
+                <label>Password</label>
+                <input type="password" id="adminPass" placeholder="Enter password">
+            </div>
+            <button class="btn-login" onclick="checkLogin()">Login</button>
+            <div class="hint-box">
+                <strong>Access Credentials:</strong><br>
+                Email: admin.udyog@gmail.com<br>
+                Password: admin@123
+            </div>
+        </div>
+    </div>
+
+    <div id="main-dashboard">
+        <aside class="sidebar">
+            <div class="logo-section">
+                <i class="ri-briefcase-fill"></i>
+                <span>Udyog Saarthi Connect </span>
+            </div>
+            <a href="#" class="nav-item active"><i class="ri-dashboard-line"></i> Admin Dashboard</a>
+        </aside>
+
+        <main class="main-container">
+            <header>
+                <h1>Admin Dashboard</h1>
+                <a class="logout-link" onclick="location.reload()"><i class="ri-logout-box-r-line"></i> Logout</a>
+            </header>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon icon-blue"><i class="ri-group-line"></i></div>
+                    <div class="stat-info"><h3>Total Users</h3><p>1</p></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon icon-cyan"><i class="ri-briefcase-line"></i></div>
+                    <div class="stat-info"><h3>Total Jobs</h3><p>2</p></div>
+                </div>
+            </div>
+
+            <section class="dashboard-section">
+                <div class="section-title" id="form-header"><i class="ri-add-circle-line"></i> Post New Job</div>
+                <form id="jobForm">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Company Name *</label>
+                            <input type="text" id="comp_name" placeholder="e.g. Jobsmart" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Job Title *</label>
+                            <input type="text" id="job_title" placeholder="e.g. Data Entry Operator" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Qualification *</label>
+                            <input type="text" id="job_qual" placeholder="e.g. (B.E/B.Tech/M.Tech/MCA)" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Location *</label>
+                            <input type="text" id="job_loc" placeholder="e.g. Remote, Bangalore" required>
+                        </div>
+                        <div class="form-group">
+                            <label>CTC</label>
+                            <input type="text" id="job_ctc" placeholder="Salary range">
+                        </div>
+                        <div class="form-group">
+                            <label>Work Mode</label>
+                            <input type="text" id="job_mode" placeholder="Full Time, Part Time">
+                        </div>
+                        <div class="form-group">
+                            <label>Application Deadline</label>
+                            <input type="text" id="job_deadline" placeholder="e.g. 31/04/2026">
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label>Job Description & Requirements</label>
+                            <textarea id="job_desc" rows="4" placeholder="Detail the job requirements..."></textarea>
+                            
+                            <div class="file-upload-container">
+                                <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 8px;">
+                                    <i class="ri-attachment-line"></i> Attach (PDF/Doc)
+                                </label>
+                                <div style="display: flex; align-items: center; gap: 15px;">
+                                    <input type="file" id="jd-upload" style="display: none;" onchange="handleFileSelect(this)">
+                                    <button type="button" class="upload-btn" onclick="document.getElementById('jd-upload').click()">
+                                        Choose File
+                                    </button>
+                                    <span id="file-name" style="font-size: 0.85rem; color: var(--text-muted);">No file selected</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <p style="margin-top: 20px; font-weight: 500; font-size: 0.9rem;">Suitable Disability Types:</p>
+                    <div class="tags-container">
+                        <span class="tag">Physical</span>
+                        <span class="tag selected">Visual</span>
+                        <span class="tag">Hearing</span>
+                        <span class="tag">Sensory</span>
+                    </div>
+
+                    <button type="button" class="btn-post" id="main-submit-btn" onclick="submitJobForm()">Post Job</button>
+                    <button type="button" class="btn-post" id="cancel-edit-btn" style="background: var(--text-muted); display: none;" onclick="resetJobForm()">Cancel</button>
+                </form>
+            </section>
+
+            <section class="dashboard-section">
+                <div class="section-title"><i class="ri-question-answer-line"></i> User Feedbacks & Queries</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>Confusion / Information Needed</th>
+                            <th>Admin Reply</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>pruthvibs963@gmail.com</td>
+                            <td>"I am confused about the interview rounds for HAL."</td>
+                            <td>
+                                <div class="reply-box">
+                                    <input type="text" class="reply-input" placeholder="Type info here...">
+                                    <button class="btn-reply" onclick="alert('Reply sent to user!')">Send</button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <section class="dashboard-section">
+                <div class="section-title">Registered Users & Application Control</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Full Name</th>
+                            <th>Email</th>
+                            <th>Job Applied</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr id="user-row-1">
+                            <td>Pruthvi B S</td>
+                            <td>pruthvibs963@gmail.com</td>
+                            <td>Engineer Trainee</td>
+                            <td><span class="badge badge-info" id="status-1">Applied</span></td>
+                            <td>
+                                <div style="display: flex; gap: 10px;">
+                                    <button onclick="approveUser(1)" style="color: var(--success); cursor: pointer; background: none; border: none; font-size: 14px;"><i class="ri-checkbox-circle-fill"></i> Approve</button>
+                                    <button onclick="rejectUser(1)" style="color: var(--danger); cursor: pointer; background: none; border: none; font-size: 14px;"><i class="ri-close-circle-fill"></i> Reject</button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <section class="dashboard-section">
+                <div class="section-title">Posted Jobs & Applicants</div>
+
+                <div class="jobs-container" id="posted-jobs-list">
+                    <div class="job-item" id="job-hal">
+                        <div class="job-content">
+                            <strong><i class="title">Engineer Trainee</i></strong>
+                            <strong class="company">Hindustan Aerospace Limited</strong>
+                            <div class="job-meta">
+                                <span><i class="ri-map-pin-line"></i> <span class="loc">Marathahalli, Bangalore</span></span>
+                                <span><i class="ri-calendar-line"></i> <span class="date">29/04/2026</span></span>
+                                <span style="color: var(--primary);"><i class="ri-user-follow-line"></i> 1 applicant</span>
+                            </div>
+                            <p class="desc" style="font-size: 0.85rem; color: var(--text-muted); margin-top: 10px;">A Engineer Trainee at HAL assists in designing, testing, and maintaining aircraft systems. The role involves supporting manufacturing processes, ensuring quality standards, and preparing technical reports. Candidates should have a degree in Mechanical or Aeronautical Engineering, basic knowledge of CAD tools, strong analytical and problem-solving abilities, and good communication skills. Teamwork, attention to detail, and a willingness to learn are essential for success in this role</p>
+                        </div>
+                        <div class="actions">
+                            <i class="ri-edit-line" onclick="editJob('hal')"></i>
+                            <i class="ri-delete-bin-line" onclick="deleteJob('hal')"></i>
+                        </div>
+                    </div>
+
+                    <div class="job-item" id="job-skill">
+                        <div class="job-content">
+                            <strong><i class="title">Customer Support Executive</i></strong>
+                            <strong class="company">Skill Flow Limited</strong>
+                            <div class="job-meta">
+                                <span><i class="ri-map-pin-line"></i> <span class="loc">HSR Layout, Bangalore</span></span>
+                                <span><i class="ri-calendar-line"></i> <span class="date">22/04/2026</span></span>
+                                <span style="color: var(--primary);"><i class="ri-user-follow-line"></i> 0 applicants</span>
+                            </div>
+                            <p class="desc" style="font-size: 0.85rem; color: var(--text-muted); margin-top: 10px;">A Customer Support Executive handles customer queries through calls, emails, or chat, ensuring quick and effective resolutions. The role involves addressing complaints, providing product or service information, and maintaining customer satisfaction. Candidates should have strong communication and interpersonal skills, problem-solving ability, basic computer knowledge, and patience. Time management, active listening, and the ability to work under pressure are essential to deliver quality customer service and build positive customer relationships</p>
+                        </div>
+                        <div class="actions">
+                            <i class="ri-edit-line" onclick="editJob('skill')"></i>
+                            <i class="ri-delete-bin-line" onclick="deleteJob('skill')"></i>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        // Login Logic
+        function checkLogin() {
+            const email = document.getElementById('adminEmail').value;
+            const pass = document.getElementById('adminPass').value;
+
+            if (email === "admin.udyog@gmail.com" && pass === "admin@123") {
+                alert("Welcome Admin");
+                document.getElementById('login-section').style.display = 'none';
+                document.getElementById('main-dashboard').style.display = 'block';
+                document.body.style.display = 'block'; // Ensure block layout for sidebar
+            } else {
+                alert("Invalid Credentials! Please try again.");
+            }
+        }
+
+        // Toggle Disability Tags
+        document.querySelectorAll('.tag').forEach(tag => {
+            tag.addEventListener('click', () => tag.classList.toggle('selected'));
+        });
+
+        // Handle File Selection
+        function handleFileSelect(input) {
+            const fileNameDisplay = document.getElementById('file-name');
+            if (input.files && input.files.length > 0) {
+                fileNameDisplay.textContent = input.files[0].name;
+                fileNameDisplay.style.color = "var(--success)";
+            }
+        }
+
+        // Dashboard Functions (Exact same as provided)
+        function editJob(jobId) {
+            const jobElement = document.getElementById('job-' + jobId);
+            const title = jobElement.querySelector('.title').innerText;
+            const company = jobElement.querySelector('.company').innerText;
+            
+            document.getElementById('job_title').value = title;
+            document.getElementById('comp_name').value = company;
+            document.getElementById('form-header').innerHTML = `<i class="ri-edit-line"></i> Editing: ${title}`;
+            document.getElementById('main-submit-btn').innerText = "Update Job";
+            document.getElementById('cancel-edit-btn').style.display = "inline-block";
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function resetJobForm() {
+            document.getElementById('jobForm').reset();
+            document.getElementById('form-header').innerHTML = `<i class="ri-add-circle-line"></i> Post New Job`;
+            document.getElementById('main-submit-btn').innerText = "Post Job";
+            document.getElementById('cancel-edit-btn').style.display = "none";
+        }
+
+        function submitJobForm() {
+            alert('Operation Successful!');
+            resetJobForm();
+        }
+
+        function deleteJob(jobId) {
+            if(confirm('Are you sure you want to remove this job?')) {
+                document.getElementById('job-' + jobId).remove();
+            }
+        }
+
+        function approveUser(userId) {
+            document.getElementById('status-' + userId).className = "badge badge-success";
+            document.getElementById('status-' + userId).innerText = "Approved";
+            alert("Application Approved!");
+        }
+
+        function rejectUser(userId) {
+            const reason = prompt("Enter specific reason for rejection:", "Skills do not match requirements.");
+            if (reason != null) {
+                document.getElementById('status-' + userId).className = "badge badge-danger";
+                document.getElementById('status-' + userId).innerText = "Rejected";
+                alert("Application Rejected.");
+            }
+        }
+    </script>
+</body>
+</html>

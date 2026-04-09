@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Profile | Udyog Saarthi</title>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <style>
+        :root { --primary: #00A9E0; --bg: #F3F4F6; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        
+        body { 
+            background: var(--bg); 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+            padding: 20px;
+        }
+
+        .reg-card { 
+            background: white; 
+            padding: 40px; 
+            border-radius: 16px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05); 
+            width: 100%; 
+            max-width: 600px; 
+        }
+
+        h2 { text-align: center; margin-bottom: 10px; color: #333; }
+        .subtitle { text-align: center; color: #666; font-size: 0.9rem; margin-bottom: 30px; }
+
+        .row { display: flex; gap: 15px; margin-bottom: 15px; }
+        .row .input-group { flex: 1; margin-bottom: 0; }
+
+        .input-group { margin-bottom: 15px; text-align: left; }
+        label { display: block; margin-bottom: 5px; font-size: 0.85rem; font-weight: 600; color: #444; }
+        
+        input, select { 
+            width: 100%; 
+            padding: 12px; 
+            border: 1px solid #ddd; 
+            border-radius: 8px; 
+            background: #f9f9f9; 
+            outline-color: var(--primary);
+            font-size: 0.95rem;
+        }
+
+        .phone-container { position: relative; }
+        .phone-container span { 
+            position: absolute; 
+            left: 12px; 
+            top: 50%; 
+            transform: translateY(-50%); 
+            color: #666; 
+            font-weight: 600;
+        }
+        .phone-container input { padding-left: 45px; }
+
+        .btn-register { 
+            width: 100%; 
+            padding: 14px; 
+            background: var(--primary); 
+            color: white; 
+            border: none; 
+            border-radius: 8px; 
+            font-weight: 600; 
+            cursor: pointer; 
+            margin-top: 20px; 
+            font-size: 1rem;
+            transition: background 0.3s; 
+        }
+        .btn-register:hover { background: #008fbd; }
+    </style>
+</head>
+<body>
+
+    <div class="reg-card">
+        <h2>Registration</h2>
+        <p class="subtitle">Complete your profile to access the portal</p>
+        
+        <form id="regForm">
+            <div class="row">
+                <div class="input-group">
+                    <label>First Name</label>
+                    <input type="text" placeholder="John" required>
+                </div>
+                <div class="input-group">
+                    <label>Last Name</label>
+                    <input type="text" placeholder="Doe" required>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label>Phone Number</label>
+                <div class="phone-container">
+                    <span>+91</span>
+                    <input type="tel" pattern="[0-9]{10}" placeholder="9876543210" required>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="input-group">
+                    <label>Date of Birth</label>
+                    <input type="date" required>
+                </div>
+                <div class="input-group">
+                    <label>Gender</label>
+                    <select required>
+                        <option value="">Select Gender</option>
+                        <option>Male</option>
+                        <option>Female</option>
+                        <option>Others</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label>Email ID</label>
+                <input type="email" placeholder="email@example.com" required>
+            </div>
+
+            <div class="input-group">
+                <label>Aadhar Card Number</label>
+                <input type="text" pattern="[0-9]{12}" placeholder="1234 5678 9012" required>
+            </div>
+
+            <div class="row">
+                <div class="input-group">
+                    <label>Disability Type</label>
+                    <select required>
+                        <option value="">Select Type</option>
+                        <option>Visual </option>
+                        <option>Hearing </option>
+                        <option>Locomotor Disability</option>
+                        <option>Intellectual Disability</option>
+                        <option>Other</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Disability Certificate</label>
+                    <input type="file" required>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-register">Complete Registration →</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('regForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert("Registration successful!");
+            window.location.href = 'User_Home.html';
+        });
+    </script>
+
+</body>
+</html>

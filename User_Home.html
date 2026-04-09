@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Udyog Saarthi Connect</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .hidden { display: none !important; }
+        .active-link { background-color: #eff6ff; color: #2563eb; font-weight: 600; border-radius: 0.5rem; }
+        .step-dot { width: 1rem; height: 1rem; border-radius: 9999px; margin: 0 auto 0.25rem; position: relative; z-index: 10; border: 2px solid white; }
+        .step-line { position: absolute; top: 0.5rem; left: 0; right: 0; height: 2px; background-color: #e5e7eb; z-index: 0; }
+        .active-dot { background-color: #0891b2; box-shadow: 0 0 0 4px rgba(8, 145, 178, 0.1); }
+        .inactive-dot { background-color: #e5e7eb; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <div id="login-screen" class="flex items-center justify-center h-screen">
+        <div class="bg-white p-8 rounded-2xl shadow-xl w-96 border border-gray-100">
+            <h2 class="text-2xl font-bold mb-2 text-cyan-600">Welcome to Saarthi</h2>
+            <p class="text-gray-500 text-sm mb-6">Enter email to access dashboard</p>
+            <input type="email" id="login-email" placeholder="name@example.com" class="w-full p-3 border border-gray-200 rounded-lg mb-4 outline-cyan-500">
+            <button onclick="login()" class="w-full bg-cyan-600 text-white p-3 rounded-lg font-bold hover:bg-cyan-700 shadow-lg shadow-cyan-100">Login</button>
+        </div>
+    </div>
+
+    <div id="dashboard" class="flex h-screen overflow-hidden hidden">
+        <aside class="w-72 bg-white border-r p-6 flex flex-col">
+            <h1 class="text-2xl font-bold text-cyan-600 mb-10 px-2">Udyog Saarthi</h1>
+            <nav class="space-y-2 flex-1">
+                <button onclick="showSection('available-jobs')" id="btn-available" class="w-full flex items-center p-3 text-gray-600 hover:bg-gray-100 rounded-lg">🔍 Available Jobs</button>
+                <button onclick="showSection('my-applications')" id="btn-apps" class="w-full flex items-center p-3 text-gray-600 hover:bg-gray-100 rounded-lg">💼 My Applications</button>
+                <button onclick="showSection('my-resumes')" id="btn-resumes" class="w-full flex items-center p-3 text-gray-600 hover:bg-gray-100 rounded-lg">📎 My Resumes</button>
+                <button onclick="showSection('my-profile')" id="btn-profile" class="w-full flex items-center p-3 text-gray-600 hover:bg-gray-100 rounded-lg">👤 My Profile</button>
+                <button onclick="showSection('user-feedback')" id="btn-feedback" class="w-full flex items-center p-3 text-gray-600 hover:bg-gray-100 rounded-lg">💬 Feedback</button>
+            </nav>
+            <div class="border-t pt-4">
+                <p id="user-display" class="text-sm font-medium mb-4 px-2 text-gray-500 italic"></p>
+                <button onclick="logout()" class="w-full text-left p-2 text-red-500 font-bold hover:bg-red-50 rounded-lg">Logout</button>
+            </div>
+        </aside>
+
+        <main class="flex-1 overflow-y-auto p-10">
+            <section id="available-jobs">
+                <h2 class="text-2xl font-bold mb-6">Explore Opportunities</h2>
+                <div id="job-feed" class="grid gap-6 mb-6">
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                        <div class="flex justify-between">
+                            <h3 class="text-xl font-bold">Hindustan Aerospace Limited</h3>
+                            <span class="text-xs bg-gray-100 p-2 rounded">Deadline: 29-04-2026</span>
+                        </div>
+                        <p class="text-cyan-600 font-medium mb-3">Engineer Trainee</p>
+                        <p class="text-gray-600 text-sm">Engineer Trainee at HAL assists in designing, testing, and maintaining aircraft systems...</p>
+                        <div class="flex justify-between items-center mt-6">
+                            <div class="text-sm text-gray-500">📍 Marathahalli, Bangalore | 💰 ₹4,00,000 LPA</div>
+                            <button id="apply-btn-1" onclick="applyJob(1, 'Engineer Trainee', 'Hindustan Aerospace Limited')" class="bg-cyan-600 text-white px-8 py-2 rounded-lg font-bold">Apply Now</button>
+                        </div>
+                    </div>
+                </div>
+                <div id="job-feed-2" class="grid gap-6">
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                        <div class="flex justify-between">
+                            <h3 class="text-xl font-bold">Skill Flow Limited</h3>
+                            <span class="text-xs bg-gray-100 p-2 rounded">Deadline: 22-04-2026</span>
+                        </div>
+                        <p class="text-cyan-600 font-medium mb-3">Customer Support Executive</p>
+                        <p class="text-gray-600 text-sm">A Customer Support Executive handles customer queries through calls, emails, or chat...</p>
+                        <div class="flex justify-between items-center mt-6">
+                            <div class="text-sm text-gray-500">📍 HSR Layout, Bangalore | 💰 ₹3,20,000 LPA</div>
+                            <button id="apply-btn-2" onclick="applyJob(2, 'Customer Support Executive', 'Skill Flow Limited')" class="bg-cyan-600 text-white px-8 py-2 rounded-lg font-bold">Apply Now</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="my-applications" class="hidden">
+                <h2 class="text-2xl font-bold mb-6">Track Status</h2>
+                <div id="tracked-list" class="space-y-6"></div>
+            </section>
+
+            <section id="my-resumes" class="hidden">
+                <h2 class="text-2xl font-bold mb-2">My Resumes</h2>
+                <p id="resume-count" class="text-gray-500 mb-4 text-sm">Uploaded: 0/5</p>
+                <input type="file" id="resume-input" class="hidden" accept=".pdf" onchange="uploadResume(event)">
+                <label for="resume-input" class="inline-block cursor-pointer bg-cyan-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-cyan-700 transition">Upload PDF Resume</label>
+                <p class="text-xs text-gray-400 mt-2">*Click the resume name to view the PDF</p>
+                <div id="resume-list" class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+            </section>
+
+            <section id="my-profile" class="hidden">
+                <h2 class="text-2xl font-bold mb-6">My Profile</h2>
+                <div class="bg-white p-8 rounded-xl border border-gray-200 shadow-sm max-w-2xl">
+                    <div class="flex items-center space-x-4 mb-8">
+                        <div class="h-20 w-20 bg-cyan-100 text-cyan-600 rounded-full flex items-center justify-center text-3xl font-bold">
+                            U
+                        </div>
+                        <div>
+                            <h3 id="profile-email-head" class="text-xl font-bold">User</h3>
+                            <p class="text-gray-500">Registered Candidate</p>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-xs font-bold text-gray-400 uppercase">Email Address</label>
+                            <p id="profile-email" class="text-gray-700 font-medium"></p>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-400 uppercase">Candidate Name</label>
+                            <p class="text-gray-700 font-medium">Pruthvi B S</p>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-xs font-bold text-gray-400 uppercase">Phone Number</label>
+                            <p class="text-gray-700 font-medium">9731304963</p>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-400 uppercase">Aadhar Number</label>
+                            <p class="text-gray-700 font-medium">3056 8157 7460</p>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-400 uppercase">Gender</label>
+                            <p class="text-gray-700 font-medium">Female</p>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-400 uppercase">Disability Type</label>
+                            <p class="text-gray-700 font-medium">Hearing</p>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-400 uppercase">Account Status</label>
+                            <p class="text-green-500 font-bold">Active</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="user-feedback" class="hidden">
+                <h2 class="text-2xl font-bold mb-2">Help & Feedback</h2>
+                <p class="text-gray-500 mb-6">Have a confusion or need info from admin? Mention it below.</p>
+                <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm max-w-2xl">
+                    <textarea id="feedback-text" rows="4" class="w-full p-4 border border-gray-200 rounded-lg focus:ring-2 focus:ring-cyan-500 outline-none mb-4" placeholder="Write your message here..."></textarea>
+                    <button onclick="sendFeedback()" class="bg-cyan-600 text-white px-6 py-2 rounded-lg font-bold hover:bg-cyan-700">Send to Admin</button>
+                    
+                    <div class="mt-8 border-t pt-6">
+                        <h4 class="font-bold mb-4">Admin Responses</h4>
+                        <div id="feedback-history" class="space-y-4">
+                            <p class="text-gray-400 text-sm italic">No previous messages.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        // Added 'feedbacks' to the state
+        let state = JSON.parse(localStorage.getItem('saarthi_state')) || {
+            isLoggedIn: false,
+            email: '',
+            resumes: [],
+            applications: [],
+            feedbacks: []
+        };
+
+        function save() { localStorage.setItem('saarthi_state', JSON.stringify(state)); }
+
+        function login() {
+            const email = document.getElementById('login-email').value;
+            if(!email) return alert("Enter email");
+            state.isLoggedIn = true;
+            state.email = email;
+            save();
+            renderApp();
+        }
+
+        function logout() {
+            state.isLoggedIn = false;
+            save();
+            location.reload();
+        }
+
+        function showSection(id) {
+            // Updated to include new sections
+            ['available-jobs', 'my-applications', 'my-resumes', 'my-profile', 'user-feedback'].forEach(s => {
+                const el = document.getElementById(s);
+                if(el) el.classList.add('hidden');
+            });
+            
+            document.getElementById(id).classList.remove('hidden');
+            document.querySelectorAll('nav button').forEach(b => b.classList.remove('active-link'));
+            
+            // Logic to highlight the correct nav button
+            const btnId = 'btn-' + (id.includes('-') ? id.split('-')[1] : id);
+            const targetBtn = document.getElementById(btnId);
+            if(targetBtn) targetBtn.classList.add('active-link');
+        }
+
+        function uploadResume(e) {
+            if(state.resumes.length >= 5) return alert("Limit reached!");
+            const file = e.target.files[0];
+            if(!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                state.resumes.push({ 
+                    name: file.name, 
+                    date: new Date().toLocaleDateString(),
+                    content: event.target.result 
+                });
+                save();
+                renderResumes();
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function openPdf(index) {
+            const resume = state.resumes[index];
+            const newWindow = window.open();
+            newWindow.document.write(`<title>${resume.name}</title><iframe src="${resume.content}" frameborder="0" style="border:0; top:0px; left:0px; bottom:0px; right:0px; width:100%; height:100%;" allowfullscreen></iframe>`);
+        }
+
+        function renderResumes() {
+            const list = document.getElementById('resume-list');
+            list.innerHTML = state.resumes.map((r, i) => `
+                <div class="bg-white p-4 rounded-lg border flex justify-between items-center shadow-sm hover:border-cyan-500 transition">
+                    <div class="flex items-center space-x-3 cursor-pointer group" onclick="openPdf(${i})">
+                        <div class="bg-red-50 text-red-600 p-2 rounded font-bold text-xs group-hover:bg-red-100">PDF</div>
+                        <span class="text-sm font-bold text-gray-700 group-hover:text-cyan-600 underline decoration-dotted">${r.name}</span>
+                    </div>
+                    <button onclick="state.resumes.splice(${i},1); save(); renderResumes();" class="text-red-400 hover:text-red-600 text-xs font-medium">Remove</button>
+                </div>
+            `).join('');
+            document.getElementById('resume-count').innerText = `Uploaded: ${state.resumes.length}/5`;
+        }
+
+        function applyJob(id, role, company) {
+            if(state.applications.find(a => a.id === id)) return;
+            state.applications.push({ id, role, company, stage: 1 });
+            save();
+            renderJobs();
+            renderApps();
+            showSection('my-applications');
+        }
+
+        function renderJobs() {
+            state.applications.forEach(app => {
+                const btn = document.getElementById(`apply-btn-${app.id}`);
+                if(btn) {
+                    btn.innerText = "Applied ✓";
+                    btn.className = "bg-gray-200 text-gray-500 px-8 py-2 rounded-lg font-bold cursor-not-allowed";
+                    btn.disabled = true;
+                }
+            });
+        }
+
+        function renderApps() {
+            const list = document.getElementById('tracked-list');
+            if(state.applications.length === 0) {
+                list.innerHTML = `<p class="text-gray-400 text-center py-10">No applications yet.</p>`;
+                return;
+            }
+            const stages = ["Applied", "Under Review", "Decision Pending", "Offered"];
+            list.innerHTML = state.applications.map(app => `
+                <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
+                    <div class="mb-6"><h3 class="font-bold text-lg">${app.role}</h3><p class="text-cyan-600 text-sm font-medium">${app.company}</p></div>
+                    <div class="relative">
+                        <div class="step-line"></div>
+                        <div class="flex justify-between items-start">
+                            ${stages.map((label, index) => {
+                                const stepNum = index + 1;
+                                const isActive = stepNum <= app.stage;
+                                return `
+                                    <div class="text-center w-1/4">
+                                        <div class="step-dot ${isActive ? 'active-dot' : 'inactive-dot'}"></div>
+                                        <p class="text-[10px] sm:text-xs mt-1 ${isActive ? 'text-cyan-600 font-bold' : 'text-gray-400'}">${label}</p>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // NEW: Feedback Logic
+        function sendFeedback() {
+            const text = document.getElementById('feedback-text').value;
+            if(!text) return alert("Please enter a message");
+            
+            if(!state.feedbacks) state.feedbacks = [];
+            state.feedbacks.push({
+                text: text,
+                date: new Date().toLocaleString(),
+                reply: "Pending admin review..."
+            });
+            
+            save();
+            document.getElementById('feedback-text').value = "";
+            renderFeedback();
+            alert("Feedback sent to admin!");
+        }
+
+        function renderFeedback() {
+            const list = document.getElementById('feedback-history');
+            if(!state.feedbacks || state.feedbacks.length === 0) return;
+            
+            list.innerHTML = state.feedbacks.map(f => `
+                <div class="bg-gray-50 p-4 rounded-lg border border-gray-100 text-sm">
+                    <p class="font-bold text-gray-400 text-[10px] mb-1">${f.date}</p>
+                    <p class="text-gray-800 mb-2"><strong>You:</strong> ${f.text}</p>
+                    <p class="text-cyan-600"><strong>Admin:</strong> ${f.reply}</p>
+                </div>
+            `).reverse().join('');
+        }
+
+        function renderApp() {
+            if(state.isLoggedIn) {
+                document.getElementById('login-screen').classList.add('hidden');
+                document.getElementById('dashboard').classList.remove('hidden');
+                document.getElementById('user-display').innerText = state.email;
+                
+                // Update profile info
+                document.getElementById('profile-email').innerText = state.email;
+                document.getElementById('profile-email-head').innerText = state.email.split('@')[0];
+
+                renderResumes(); 
+                renderJobs(); 
+                renderApps(); 
+                renderFeedback();
+                showSection('available-jobs');
+            } else {
+                document.getElementById('login-screen').classList.remove('hidden');
+                document.getElementById('dashboard').classList.add('hidden');
+            }
+        }
+
+        renderApp();
+    </script>
+</body>
+</html>
