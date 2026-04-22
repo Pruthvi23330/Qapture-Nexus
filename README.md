@@ -94,12 +94,6 @@ Password: admin@123
 * Decision Pending
 * Offered / Rejected
 
-## ⚠️ Limitations
-
-* No backend/database integration
-* Data stored only in browser (not persistent across devices)
-* Basic authentication (not secure for production)
-
 ## 🔮 Future Enhancements
 
 * Add backend (Node.js / Firebase)
