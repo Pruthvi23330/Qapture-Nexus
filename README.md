@@ -4,8 +4,6 @@
 
 **Udyog Saarthi Connect Development** is a web-based job portal designed to connect job seekers, especially persons with disabilities, with employment opportunities. The system includes both **Admin** and **User** interfaces with essential job management features.
 
----
-
 ## 🚀 Features
 
 ### 👨‍💼 Admin Module
@@ -18,8 +16,6 @@
 * Add rejection reasons
 * Respond to user queries
 
----
-
 ### 👤 User Module
 
 * User Registration with disability details
@@ -31,7 +27,6 @@
 * Send feedback to admin
 * View admin responses
 
----
 
 ## 🛠️ Technologies Used
 
@@ -40,9 +35,6 @@
 * **Icons:** Remix Icons / Font Awesome
 * **Scripting:** JavaScript
 * **Storage:** Browser Local Storage
-
----
-
 ## ⚙️ System Architecture
 
 * Fully **client-side application**
@@ -50,20 +42,13 @@
 * Data is stored using **Local Storage**
 * Dynamic UI updates using JavaScript DOM
 
----
-
 ## 🔐 Admin Credentials
 
-```
 Email: admin.udyog@gmail.com
 Password: admin@123
-```
-
----
 
 ## 📂 Project Structure
 
-```
 📁 Udyog-Saarthi-Connect
 │── admin_dashboard.html
 │── login.html
@@ -71,9 +56,7 @@ Password: admin@123
 │── user_dashboard.html
 │── styles (internal CSS)
 │── scripts (JavaScript logic)
-```
 
----
 
 ## 🔄 Workflow
 
@@ -93,9 +76,7 @@ Password: admin@123
 4. Apply for jobs
 5. Track application status
 6. Send feedback to admin
-
----
-
+   
 ## 💾 Data Handling
 
 * Uses **Local Storage (`saarthi_state`)**
@@ -106,8 +87,6 @@ Password: admin@123
   * Resume files (base64)
   * Feedback messages
 
----
-
 ## 📊 Application Status Stages
 
 * Applied
@@ -115,15 +94,11 @@ Password: admin@123
 * Decision Pending
 * Offered / Rejected
 
----
-
 ## ⚠️ Limitations
 
 * No backend/database integration
 * Data stored only in browser (not persistent across devices)
 * Basic authentication (not secure for production)
-
----
 
 ## 🔮 Future Enhancements
 
@@ -131,12 +106,8 @@ Password: admin@123
 * Secure authentication system
 * Real-time notifications
 * Advanced filtering for jobs
-* Accessibility improvements (WCAG standards)
-
----
+* Accessibility improvements
 
 ## 📖 Conclusion
 
 Udyog Saarthi Connect provides a simple and accessible platform for job seekers and administrators. It demonstrates how a full workflow system can be built using only frontend technologies.
-
----
